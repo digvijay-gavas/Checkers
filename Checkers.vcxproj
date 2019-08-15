@@ -87,6 +87,7 @@
   <ItemGroup>
     <ClInclude Include="GameEngine.h" />
     <ClInclude Include="BoardGUI.h" />
+    <ClInclude Include="README.md" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>
