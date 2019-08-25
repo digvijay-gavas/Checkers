@@ -16,8 +16,6 @@ BoardGUI::BoardGUI():cx(0),cy(0),cxm(0),cym(0),isCursorSelected(false),isMoveSel
 	symbols[4] = 'U';
 	symbols[5] = '>';
 	
-	game.player1.setName("Player oO");
-	game.player2.setName("Player uU");
 
 	stdoutH = GetStdHandle(STD_OUTPUT_HANDLE);
 	
@@ -114,9 +112,9 @@ void BoardGUI::updateBoard()
 	}
 
 	setConsoleCursor(N_OF_CELL * CELL_WIDTH + CELL_WIDTH, (N_OF_CELL - 1 ) * CELL_HEIGTH + CELL_HEIGTH-1);
-	cout << (game.player1.isMyTurn ? "-> " : "   ") << game.player1.getName() << endl;
+	cout << (game.isPlayer1MyTurn() ? "-> " : "   ") << game.getPlayer1Name() << "  " << game.getPlayer1Count() << "  " << endl;
 	setConsoleCursor(N_OF_CELL * CELL_WIDTH + CELL_WIDTH, (N_OF_CELL - 1) * CELL_HEIGTH + CELL_HEIGTH);
-	cout << (game.player2.isMyTurn ? "-> " : "   ") << game.player2.getName() << endl;
+	cout << (game.isPlayer2MyTurn() ? "-> " : "   ") << game.getPlayer2Name() << "  " << game.getPlayer2Count() << "  " << endl;
 	
 }
 // selecting symbols for player 1 and 2

@@ -2,8 +2,9 @@
 #include <string>
 
 
-Player::Player(char name[]):isMyTurn(false)
+Player::Player(char name[], int count):isMyTurn(false)
 {
+	this->count = count;
 	strcpy(this->name,name);
 }
 
@@ -15,7 +16,12 @@ char* Player::getName()
 {
 	return name;
 }
-void Player::setCount(int count)
+int Player::getCount()
 {
-	this->count=count;
+	return this->count;
+}
+
+void Player::decreaseCount()
+{
+	 this->count--;
 }

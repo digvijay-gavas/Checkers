@@ -3,9 +3,7 @@ using namespace std;
 
 GameEngine::GameEngine():playGround(_playGround)
 {
-	// Setting player turns
-	player1.isMyTurn=true;
-	player2.isMyTurn=false;
+	
 	// Positioning players in playGround array-------------------------------------------------------------
 	for (int i=0;i<N_OF_CELL;i++)
 	{
@@ -14,21 +12,31 @@ GameEngine::GameEngine():playGround(_playGround)
 			_playGround[j][i]=EMPTY;
 		}
 	}
+	int count = 0;
 	for (int i=0;i<3;i++)
 	{
 		for(int j=i%2;j<N_OF_CELL;j+=2)
 		{
 			_playGround[j][i] =PYLAER_1;
+			count++;
 		}
 	}
+	player1 = new Player("oO", count);
+
+	count = 0;
 	for(int i=N_OF_CELL-3;i<N_OF_CELL;i++)
 	{
 		for(int j=i%2;j<N_OF_CELL;j+=2)
 		{
 			_playGround[j][i]=PYLAER_2;
+			count++;
 		}
 	}
+	player2 = new Player("uU", count);
 
+	// Setting player turns
+	player1->isMyTurn = true;
+	player2->isMyTurn = false;
 }
 
 int GameEngine::isMovePossible(int x,int y,int x1,int y1)
@@ -63,9 +71,9 @@ int GameEngine::isMovePossible(int x,int y,int x1,int y1)
 std::multimap<int, int> GameEngine::getPosibleMoves(int x,int y)
 {
 	std::multimap<int, int> moves;
-	if( ((PYLAER_1==_playGround[x][y] || PYLAER_1Q==_playGround[x][y]) + player1.isMyTurn)%2)	
+	if( ((PYLAER_1==_playGround[x][y] || PYLAER_1Q==_playGround[x][y]) + player1->isMyTurn)%2)	
 		return moves;
-	else if( ((PYLAER_2==_playGround[x][y] || PYLAER_2Q==_playGround[x][y]) + player2.isMyTurn)%2)	
+	else if( ((PYLAER_2==_playGround[x][y] || PYLAER_2Q==_playGround[x][y]) + player2->isMyTurn)%2)	
 		return moves;
 
 	for(int k=1;k<=2;k++)
@@ -101,14 +109,14 @@ std::multimap<int, int> GameEngine::getPosibleMoves(int x,int y)
 
 int GameEngine::makeMove(int cx,int cy,int cxm,int cym)
 {
-	if( (PYLAER_1==_playGround[cx][cy] || PYLAER_1Q==_playGround[cx][cy]) && player1.isMyTurn)
+	if( (PYLAER_1==_playGround[cx][cy] || PYLAER_1Q==_playGround[cx][cy]) && player1->isMyTurn)
 	{
 		if(1==isMovePossible(cx,cy,cxm,cym))
 		{
 			_playGround[cxm][cym] = _playGround[cx][cy];
 			_playGround[cx][cy] =EMPTY ;
-			player1.isMyTurn=false;
-			player2.isMyTurn=true;
+			player1->isMyTurn=false;
+			player2->isMyTurn=true;
 			if(cxm>=0 && cxm<N_OF_CELL && cym==N_OF_CELL-1)
 				_playGround[cxm][cym]=PYLAER_1Q;
 			return 0;
@@ -118,8 +126,9 @@ int GameEngine::makeMove(int cx,int cy,int cxm,int cym)
 			_playGround[cxm][cym] = _playGround[cx][cy];
 			_playGround[(cx+cxm)/2][(cy+cym)/2]=EMPTY;
 			_playGround[cx][cy] =EMPTY ;
-			player1.isMyTurn=false;
-			player2.isMyTurn=true;
+			player1->isMyTurn=false;
+			player2->isMyTurn=true;
+			player2->decreaseCount();
 			if(cxm>=0 && cxm<N_OF_CELL && cym==N_OF_CELL-1)
 				_playGround[cxm][cym]=PYLAER_1Q;
 			return 0;
@@ -127,14 +136,14 @@ int GameEngine::makeMove(int cx,int cy,int cxm,int cym)
 		return -1;
 		
 	}
-	else if( (PYLAER_2==_playGround[cx][cy] || PYLAER_2Q==_playGround[cx][cy]) && player2.isMyTurn)
+	else if( (PYLAER_2==_playGround[cx][cy] || PYLAER_2Q==_playGround[cx][cy]) && player2->isMyTurn)
 	{
 		if(1==isMovePossible(cx,cy,cxm,cym))
 		{
 			_playGround[cxm][cym] = _playGround[cx][cy];
 			_playGround[cx][cy] =EMPTY ;
-			player2.isMyTurn=false;
-			player1.isMyTurn=true;
+			player2->isMyTurn=false;
+			player1->isMyTurn=true;
 			if(cxm>=0 && cxm<N_OF_CELL && cym==0)
 				_playGround[cxm][cym]=PYLAER_2Q;
 			return 0;
@@ -144,8 +153,9 @@ int GameEngine::makeMove(int cx,int cy,int cxm,int cym)
 			_playGround[cxm][cym] = _playGround[cx][cy];
 			_playGround[(cx+cxm)/2][(cy+cym)/2]=EMPTY;
 			_playGround[cx][cy] =EMPTY ;
-			player2.isMyTurn=false;
-			player1.isMyTurn=true;
+			player2->isMyTurn=false;
+			player1->isMyTurn=true;
+			player1->decreaseCount();
 			if(cxm>=0 && cxm<N_OF_CELL && cym==0)
 				_playGround[cxm][cym]=PYLAER_2Q;
 			return 0;
@@ -153,5 +163,35 @@ int GameEngine::makeMove(int cx,int cy,int cxm,int cym)
 		return -1;
 		
 	}
-	
+
+}
+
+char* GameEngine::getPlayer1Name()
+{
+	return player1->getName();
+}
+
+char* GameEngine::getPlayer2Name()
+{
+	return player2->getName();
+}
+
+bool GameEngine::isPlayer1MyTurn()
+{
+	return player1->isMyTurn;
+}
+
+bool GameEngine::isPlayer2MyTurn()
+{
+	return player2->isMyTurn;
+}
+
+int GameEngine::getPlayer1Count()
+{
+	return player1->getCount();
+}
+
+int GameEngine::getPlayer2Count()
+{
+	return player2->getCount();
 }

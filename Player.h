@@ -2,9 +2,9 @@
 class Player
 {
 public:
-	Player(){}
-	Player(char[]);
-	void setCount(int);
+	Player(char[], int count);
+	int getCount();
+	void decreaseCount();
 	void setName(char[]);
 	/*std::string*/ char* getName();
 	bool isMyTurn;
