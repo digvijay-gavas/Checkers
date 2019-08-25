@@ -22,9 +22,10 @@ public:
 	std::multimap<int, int> getPosibleMoves(int,int);    // give the psooible moves according to player postion and turn
 	int isMovePossible(int,int,int,int);                 // tell weather move is possible or not
 	int makeMove(int,int,int,int);                       // make the move is move is valid
-	
+	Player player1, player2;
+
 private:
-	Player player1,player2;
+	
 	int _playGround[N_OF_CELL][N_OF_CELL];
 	int x,y;
 };
